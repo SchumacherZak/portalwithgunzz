@@ -28,6 +28,18 @@ project/assembly_name="MultiplayerFPSTemplate"
 
 import/blender/enabled=false
 
+[autoload]
+
+Global="*uid://c1xxttxh8shp6"
+
+[dotnet]
+
+project/assembly_name="MultiplayerFPSTemplate"
+
+[filesystem]
+
+import/blender/enabled=false
+
 [input]
 
 ui_accept={
@@ -93,3 +105,7 @@ look_down={
 "events": [Object(InputEventJoypadMotion,"resource_local_to_scene":false,"resource_name":"","device":-1,"axis":3,"axis_value":1.0,"script":null)
 ]
 }
+
+[physics]
+
+3d/default_gravity=12.0
