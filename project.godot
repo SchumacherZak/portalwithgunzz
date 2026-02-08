@@ -32,14 +32,6 @@ project/assembly_name="MultiplayerFPSTemplate"
 
 import/blender/enabled=false
 
-[dotnet]
-
-project/assembly_name="MultiplayerFPSTemplate"
-
-[filesystem]
-
-import/blender/enabled=false
-
 [input]
 
 ui_accept={

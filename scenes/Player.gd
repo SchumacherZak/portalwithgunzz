@@ -9,12 +9,12 @@ signal health_changed(health_value)
 
 var health = 3
 
-const SPEED = 10.0
-const JUMP_VELOCITY = 10.0
+#const SPEED = 10.0
+#const JUMP_VELOCITY = 10.0
 const LOOK_SPEED = 5 # Adjust as needed for controller comfort
 
 # Get the gravity from the project settings to be synced with RigidBody nodes.
-var gravity = 20.0
+var gravity = 9.8
 
 func _enter_tree():
 	print(name)
@@ -45,6 +45,17 @@ func _unhandled_input(event):
 			hit_player.receive_damage.rpc_id(hit_player.get_multiplayer_authority())
 
 func _physics_process(delta):
+	var input_dir := Input.get_vector("left", "right", "up", "down").normalized()
+	wish_dir = self.global_transform.basis * Vector3(input_dir.x, 0., input_dir.y)
+	
+	if is_on_floor():
+		if Input.is_action_just_pressed("jump") or (auto_bhop and Input.is_action_pressed("jump")):
+			self.velocity.y = JUMP_VELOCITY
+		_handle_ground_physics(delta)
+	else:
+		_handle_air_physics(delta)
+		
+	move_and_slide()
 	if not is_multiplayer_authority(): return
 	
 	# Add the gravity.
@@ -57,14 +68,14 @@ func _physics_process(delta):
 
 	# Get the input direction and handle the movement/deceleration.
 	# As good practice, you should replace UI actions with custom gameplay actions.
-	var input_dir = Input.get_vector("left", "right", "up", "down")
-	var direction = (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
-	if direction:
-		velocity.x = direction.x * SPEED
-		velocity.z = direction.z * SPEED
-	else:
-		velocity.x = move_toward(velocity.x, 0, SPEED)
-		velocity.z = move_toward(velocity.z, 0, SPEED)
+	#var input_dir = Input.get_vector("left", "right", "up", "down")
+	#var direction = (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
+	#if direction:
+		#velocity.x = direction.x * SPEED
+		#velocity.z = direction.z * SPEED
+	#else:
+		#velocity.x = move_toward(velocity.x, 0, SPEED)
+		#velocity.z = move_toward(velocity.z, 0, SPEED)
 
 	# --- New: Handle Camera Look (Right Stick) ---
 	# Get the controller stick input (Horizontal and Vertical)
@@ -107,3 +118,132 @@ func receive_damage():
 func _on_animation_player_animation_finished(anim_name):
 	if anim_name == "shoot":
 		anim_player.play("idle")
+
+#debug physics code V1
+var mouse_sensitivity = 0.002
+
+@onready var bulletSpawn = $Head/Camera3D/bulletSpawn
+var ammo : int = 5
+var player_health = 100
+var canThrow = true
+@onready var my_label = $Label
+
+@export var JUMP_VELOCITY := 6.5
+@export var look_sensitivity : float = 0.006
+@export var auto_bhop := true
+
+@export var walk_speed := 7.0
+@export var sprint_speed := 8.5
+@export var ground_accel := 14.0
+@export var ground_deccel :=5.0
+@export var ground_friction := 6.0
+
+const HEADBOB_MOVE_AMOUNT = 0.06   
+const HEADBOB_FREQUENCY = 2.4 
+var headbob_time := 0.0
+
+@export var air_cap := 0.85
+@export var air_accel := 800.0
+@export var air_move_speed := 500.0
+
+var wish_dir := Vector3.ZERO
+
+
+func get_move_speed():
+	if Input.is_action_just_pressed("sprint"):
+		return sprint_speed 
+	else:
+		return walk_speed
+	
+#func _ready():
+	#Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+	#for child in %WorldModel.find_children ("*", "VisualInstance3D"):
+		#child.set_layer_mask_value(1, false)
+		#child.set_layer_mask_value(2, true)
+
+#func _unhandled_input(event):
+	#if event is InputEventMouseMotion:
+		#Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+	#elif event.is_action_pressed("ui_cancel"):
+		#Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+	
+	#if Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED:
+		#if event is InputEventMouseMotion:
+			#rotate_y(-event.relative.x * mouse_sensitivity)
+			#%Camera3D.rotate_x(-event.relative.y * mouse_sensitivity)
+			#%Camera3D.rotation.x = clampf(%Camera3D.rotation.x, -deg_to_rad(90), deg_to_rad(90))
+
+	# Add the gravity.
+	# Get the input direction and handle the movement/deceleration.
+	# As good practice, you should replace UI actions with custom gameplay actions.
+
+	#var direction := (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
+	#if direction:
+		#velocity.x = direction.x * SPEED
+		#velocity.z = direction.z * SPEED
+	#else:
+		#velocity.x = move_toward(velocity.x, 0, SPEED)
+		#velocity.z = move_toward(velocity.z, 0, SPEED)
+
+	
+	#for i in get_slide_collision_count():
+		#var collision = get_slide_collision(i)
+	#print("I collided with ", collision.get_collider().name)
+		#if collision.get_collider().is_in_group("enemy"):
+			#reduce_health(10)
+
+func _handle_ground_physics(delta):
+	# simmilar to the air movement. Acceleration and friction on ground.
+	var cur_speed_in_wish_dir = self.velocity.dot(wish_dir)
+	var add_speed_till_cap = get_move_speed() - cur_speed_in_wish_dir
+	if add_speed_till_cap > 0:
+		var accel_speed = ground_accel * delta * get_move_speed()
+		accel_speed = min(accel_speed, add_speed_till_cap)
+		self.velocity += accel_speed * wish_dir
+
+	# apply friction
+	var control = max(self.velocity.length(), ground_deccel)
+	var drop = control * ground_friction * delta
+	var new_speed = max(self.velocity.length() - drop, 0.0)
+	if self.velocity.length() > 0:
+		new_speed /= self.velocity.length()
+	self.velocity *= new_speed
+
+func is_surface_too_steep(normal : Vector3) -> bool:
+	var max_slope_ang_dot = Vector3(0, 1, 0).rotated(Vector3(1.0, 0, 0), self.floor_max_angle).dot(Vector3(0, 1, 0))
+	if normal.dot(Vector3(0, 1, 0)) < max_slope_ang_dot:
+		return false
+	return false
+
+func _handle_air_physics(delta):
+	self.velocity.y -= ProjectSettings.get_setting("physics/3d/default_gravity") * delta
+	
+	var cur_speed_in_wish_dir = self.velocity.dot(wish_dir)
+	var capped_speed = min((air_move_speed * wish_dir).length(), air_cap)
+	var add_speed_till_cap = capped_speed - cur_speed_in_wish_dir
+	if add_speed_till_cap > 0:
+		var accel_speed = air_accel * air_move_speed * delta
+		accel_speed = min(accel_speed, add_speed_till_cap)
+		self.velocity += accel_speed * wish_dir
+	
+	if is_on_wall():
+		if is_surface_too_steep(get_wall_normal()):
+			self.motion_mode = CharacterBody3D.MOTION_MODE_FLOATING
+		else:
+			self.motion_mode = CharacterBody3D.MOTION_MODE_GROUNDED
+		clip_velocity(get_wall_normal(), 1, delta) # allows surf
+
+func _process(delta):
+	pass
+
+func clip_velocity(normal: Vector3, overbounce : float, delta : float) -> void:
+	var backoff := self.velocity.dot(normal) * overbounce
+	
+	if backoff >= 0: return
+	
+	var change := normal * backoff
+	self.velocity -= change
+	
+	var adjust := self.velocity.dot(normal)
+	if adjust < 0.0:
+		self.velocity -= normal * adjust
