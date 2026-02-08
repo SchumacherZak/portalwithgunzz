@@ -20,25 +20,9 @@ run/main_scene="res://scenes/testWorld.tscn"
 config/features=PackedStringArray("4.6", "Forward Plus")
 config/icon="/home/charliemccarthy/Downloads/549b019bc91c2cb38e44a6cf85e519db.jpg"
 
-[dotnet]
-
-project/assembly_name="MultiplayerFPSTemplate"
-
-[filesystem]
-
-import/blender/enabled=false
-
 [autoload]
 
 Global="*uid://c1xxttxh8shp6"
-
-[dotnet]
-
-project/assembly_name="MultiplayerFPSTemplate"
-
-[filesystem]
-
-import/blender/enabled=false
 
 [dotnet]
 
