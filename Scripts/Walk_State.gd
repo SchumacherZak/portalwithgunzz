@@ -4,7 +4,7 @@ class_name WalkState
 
 func physcis_update(delta):
 	var character = state_machine.get_parent()
-	var direction = Input.get_axis("move_left", "move_right")
+	var direction = Input.get_axis("left", "right")
 
 	if direction == 0:
 		state_machine.change_state("idlestate")

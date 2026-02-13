@@ -148,7 +148,7 @@ var canThrow = true
 @export var walk_speed := 7.0
 @export var sprint_speed := 8.5
 @export var ground_accel := 14.0
-@export var ground_deccel :=5.0
+@export var ground_deccel := 5.0
 @export var ground_friction := 6.0
 
 const HEADBOB_MOVE_AMOUNT = 0.06   

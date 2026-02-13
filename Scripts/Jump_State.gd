@@ -15,7 +15,7 @@ func physics_update(delta):
 	character.velocity.y += 980 * delta
 
 	# Handle horizontal movement
-	var direction = Input.get_axis("move_left", "move_right")
+	var direction = Input.get_axis("left", "right")
 	character.velocity.x = direction * 200
 
 	character.move_and_slide()
