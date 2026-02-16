@@ -1,20 +1,21 @@
-extends Node
-
 class_name State
 
-var state_machine: StateMachine
+extends Node
 
-func enter():
+signal transition(new_state_name: StringName)
+#var state_machine: StateMachine
+
+func enter() -> void:
 	pass
 
-func exit():
+func exit() -> void:
 	pass
 
-func update(delta: float):
+func update(delta: float) -> void:
 	pass
 
-func physics_update(delta: float):
+func physics_update(delta: float) -> void:
 	pass
 
-func handle_input(event: InputEvent):
+func handle_input(event: InputEvent) -> void:
 	pass

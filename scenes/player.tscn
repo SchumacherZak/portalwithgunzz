@@ -7,7 +7,7 @@
 [ext_resource type="Script" uid="uid://rfygvim1kdv" path="res://Scripts/State_Machine.gd" id="5_smehm"]
 [ext_resource type="Script" uid="uid://b2dsy7c2ccu7f" path="res://Scripts/Idle_State.gd" id="6_ur7pv"]
 [ext_resource type="Script" uid="uid://blpk7dwmlxj57" path="res://Scripts/Jump_State.gd" id="7_y4r1p"]
-[ext_resource type="Script" uid="uid://qbdsyww7rumx" path="res://Scripts/Walk_State.gd" id="8_d2wvv"]
+[ext_resource type="Script" uid="uid://dnflv2ryp4auv" path="res://Scripts/State.gd" id="8_smehm"]
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_xk8km"]
 
@@ -244,9 +244,8 @@ metadata/_custom_type_script = "uid://b2dsy7c2ccu7f"
 script = ExtResource("7_y4r1p")
 metadata/_custom_type_script = "uid://blpk7dwmlxj57"
 
-[node name="WalkState" type="Node" parent="StateMachine" unique_id=1967985741]
-script = ExtResource("8_d2wvv")
-metadata/_custom_type_script = "uid://qbdsyww7rumx"
+[node name="WalkState" type="Node" parent="StateMachine" unique_id=483172002]
+script = ExtResource("8_smehm")
 
 [connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_animation_player_animation_finished"]
 [connection signal="animation_finished" from="CrouchAnimationPlayer" to="." method="_on_crouch_animation_finished"]
