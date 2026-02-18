@@ -178,7 +178,7 @@ _data = {
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_dqkch"]
 
-[node name="Player" type="CharacterBody3D" unique_id=820130408 node_paths=PackedStringArray("crouch_anim_player", "crouch_shapecast")]
+[node name="Player" type="CharacterBody3D" unique_id=820130408 node_paths=PackedStringArray("crouch_anim_player", "crouch_shapecast") groups=["Player"]]
 collision_layer = 2
 script = ExtResource("1_2v3wm")
 crouch_anim_player = NodePath("CrouchAnimationPlayer")
@@ -188,7 +188,7 @@ crouch_shapecast = NodePath("ShapeCast3D")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 mesh = SubResource("CapsuleMesh_xk8km")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=2073760843]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=2073760843 groups=["Player"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 shape = SubResource("CapsuleShape3D_67y6s")
 
