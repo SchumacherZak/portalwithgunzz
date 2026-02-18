@@ -16,10 +16,9 @@ func _ready() -> void:
 
 func _process(delta: float) -> void:
 	CURRENT_STATE.update(delta)
-	print("im_working")
 
 func _physics_process(delta: float) -> void:
-	CURRENT_STATE.physcis_update(delta)
+	CURRENT_STATE.physics_update(delta)
 
 func on_child_transition(new_state_name: StringName) -> void:
 	var new_state = states.get(new_state_name)
