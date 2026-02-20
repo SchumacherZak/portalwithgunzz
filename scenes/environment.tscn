@@ -3,6 +3,7 @@
 [ext_resource type="PackedScene" uid="uid://ckf3250w8jpro" path="res://models/Environment.glb" id="1_p4eel"]
 [ext_resource type="Texture2D" uid="uid://bugwfwhpqfp1n" path="res://addons/kenney_prototype_textures/dark/texture_09.png" id="2_dpxbx"]
 [ext_resource type="Texture2D" uid="uid://1opha1cxcimy" path="res://addons/kenney_prototype_textures/orange/texture_10.png" id="3_tbg6f"]
+[ext_resource type="PackedScene" uid="uid://m1wd27j0gvt6" path="res://scenes/Lava.tscn" id="4_hlc4h"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_if5ix"]
 albedo_texture = ExtResource("2_dpxbx")
@@ -17,3 +18,6 @@ uv1_triplanar = true
 [node name="Plane" parent="." index="0" unique_id=658745660]
 surface_material_override/0 = SubResource("StandardMaterial3D_if5ix")
 surface_material_override/1 = SubResource("StandardMaterial3D_jylvv")
+
+[node name="Lava" parent="." index="1" unique_id=95045267 instance=ExtResource("4_hlc4h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.88875, 2.3906674, 22.941969)

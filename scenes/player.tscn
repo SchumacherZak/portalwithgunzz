@@ -160,31 +160,19 @@ _data = {
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_dqkch"]
 
-[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_qlg0r"]
-radius = 0.30419922
-height = 0.9243164
-
-[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_tuyoq"]
-radius = 0.110839844
-height = 0.59558105
-
-[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_fjrip"]
-radius = 0.079589844
-height = 0.6496582
-
-[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_smehm"]
-radius = 0.06982422
-height = 2.3739624
-
-[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_ur7pv"]
-radius = 0.23876953
-height = 0.5963135
-
-[node name="Player" type="CharacterBody3D" unique_id=820130408 node_paths=PackedStringArray("crouch_anim_player", "crouch_shapecast")]
+[node name="Player" type="CharacterBody3D" unique_id=820130408 node_paths=PackedStringArray("crouch_anim_player", "crouch_shapecast") groups=["Player"]]
 collision_layer = 2
 script = ExtResource("1_2v3wm")
 crouch_anim_player = NodePath("CrouchAnimationPlayer")
 crouch_shapecast = NodePath("ShapeCast3D")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1832600017]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+mesh = SubResource("CapsuleMesh_xk8km")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=2073760843 groups=["Player"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("CapsuleShape3D_67y6s")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1889766177]
 libraries/ = SubResource("AnimationLibrary_p6wdk")
